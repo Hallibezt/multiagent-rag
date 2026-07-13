@@ -1,0 +1,48 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# ---- Virtual envs ----
+.venv/
+venv/
+env/
+.python-version
+
+# ---- Secrets / env (NEVER commit) ----
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+.envrc
+
+# ---- Notebooks ----
+.ipynb_checkpoints/
+
+# ---- Node (homepage / tooling, if any) ----
+node_modules/
+
+# ---- Kubernetes / local overrides ----
+*.local.yaml
+*.local.yml
+kubeconfig
+*.kubeconfig
+
+# ---- OS / editor ----
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~
