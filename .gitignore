@@ -16,7 +16,6 @@ htmlcov/
 .venv/
 venv/
 env/
-.python-version
 
 # ---- Secrets / env (NEVER commit) ----
 .env
@@ -51,3 +50,6 @@ Thumbs.db
 # Personal engineering bible + learning notes — kept out of the public portfolio repo.
 CLAUDE.md
 learning/
+
+# ---- Claude Code (local machine settings) ----
+.claude/settings.local.json

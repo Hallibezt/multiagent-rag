@@ -1,0 +1,34 @@
+.PHONY: install up down reset ps logs smoke psql-doc psql-sql fmt lint
+
+install:        ## install deps into the uv-managed venv
+	uv sync
+
+up:             ## start both data stores, wait until healthy
+	docker compose up -d --wait
+
+down:           ## stop stores (keep data)
+	docker compose down
+
+reset:          ## stop stores AND wipe their data volumes
+	docker compose down -v
+
+ps:
+	docker compose ps
+
+logs:
+	docker compose logs -f
+
+smoke:          ## prove the local stack works end-to-end (no secrets)
+	uv run python -m multiagent_rag.smoke
+
+psql-doc:       ## psql into the document / vector store
+	docker compose exec doc-store psql -U rag -d docs
+
+psql-sql:       ## psql into the structured store
+	docker compose exec sql-store psql -U rag -d guestpad
+
+fmt:
+	uv run ruff format .
+
+lint:
+	uv run ruff check .

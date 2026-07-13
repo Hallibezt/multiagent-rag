@@ -1,0 +1,46 @@
+# Local infra for the multi-agent RAG backend — everything as code, zero secrets.
+#   docker compose up -d --wait      # both stores, ready to use
+#
+# TWO separate Postgres instances on purpose (CLAUDE.md Rule 4 seam + Phase 3
+# isolation): the RAG agent's document/vector store and the SQL agent's
+# structured store are distinct network endpoints. That's what later lets a
+# Kubernetes NetworkPolicy *prove* the SQL agent cannot reach the document store.
+services:
+  doc-store:
+    # RAG agent's data: embedded document chunks (pgvector).
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_USER: rag
+      POSTGRES_PASSWORD: rag        # local dev only — NOT a secret
+      POSTGRES_DB: docs
+    ports:
+      - "5432:5432"
+    volumes:
+      - doc-store-data:/var/lib/postgresql/data
+      - ./db/doc-store/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rag -d docs"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  sql-store:
+    # SQL agent's data: the structured GuestPad tables (seeded later).
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_USER: rag
+      POSTGRES_PASSWORD: rag        # local dev only — NOT a secret
+      POSTGRES_DB: guestpad
+    ports:
+      - "5433:5432"
+    volumes:
+      - sql-store-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rag -d guestpad"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  doc-store-data:
+  sql-store-data:

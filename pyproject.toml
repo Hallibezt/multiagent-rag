@@ -1,0 +1,28 @@
+[project]
+name = "multiagent-rag"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Haraldur Kristjansson", email = "haraldur.kristjansson@hrmsoftware.se" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "fastembed>=0.8.0",
+    "pgvector>=0.5.0",
+    "psycopg[binary]>=3.3.4",
+    "pydantic-settings>=2.14.2",
+]
+
+[project.scripts]
+multiagent-rag = "multiagent_rag:main"
+
+[build-system]
+requires = ["uv_build>=0.11.28,<0.12.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "ruff>=0.15.21",
+]

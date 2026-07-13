@@ -12,7 +12,7 @@ multi-version seams baked in (CLAUDE.md Rule 4).
 ## Phase 0 — Ingestion
 *Done when: a similarity query returns sensible chunks from real GuestPad content.*
 
-- [ ] Decide Python project tooling + pin verified versions (Rule 1)
+- [x] Decide Python project tooling + pin verified versions (Rule 1) — uv + Python 3.13; versions verified against PyPI + locked in `uv.lock`; two-store docker-compose + injected config; smoke test
 - [ ] Access to a GuestPad Postgres (pick the property with the richest seed content)
 - [ ] Stand up the pgvector table(s)
 - [ ] Chunk + embed the GuestPad document columns (see CLAUDE.md → GuestPad Data Map)
