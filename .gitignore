@@ -46,3 +46,8 @@ Thumbs.db
 .vscode/
 *.swp
 *~
+
+# ---- Local-only working docs (intentionally untracked) ----
+# Personal engineering bible + learning notes — kept out of the public portfolio repo.
+CLAUDE.md
+learning/
