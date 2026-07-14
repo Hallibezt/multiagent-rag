@@ -41,6 +41,25 @@ services:
       timeout: 5s
       retries: 10
 
+  checkpoint-store:
+    # Graph checkpoints (LangGraph Postgres saver) — orchestration state, kept
+    # separate from the agents' data stores. This is what lets a crashed run resume.
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_USER: rag
+      POSTGRES_PASSWORD: rag          # local dev only — NOT a secret
+      POSTGRES_DB: checkpoints
+    ports:
+      - "5434:5432"
+    volumes:
+      - checkpoint-store-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rag -d checkpoints"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
 volumes:
   doc-store-data:
   sql-store-data:
+  checkpoint-store-data:

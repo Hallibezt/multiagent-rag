@@ -30,6 +30,10 @@ class Settings(BaseSettings):
         default="postgresql://rag:rag@localhost:5433/guestpad",
         description="Postgres store for the structured GuestPad tables (the SQL agent's data).",
     )
+    checkpoint_dsn: str = Field(
+        default="postgresql://rag:rag@localhost:5434/checkpoints",
+        description="Postgres store for LangGraph checkpoints (graph/orchestration state).",
+    )
 
     # --- Embedding (fastembed: local, no API key) ---
     embedding_model: str = Field(

@@ -38,6 +38,9 @@ search:         ## similarity search, e.g. make search Q="how do I use the hot t
 ask:            ## ask the graph, e.g. make ask Q="how do I use the hot tub"
 	uv run python -m multiagent_rag.graph.run "$(Q)"
 
+checkpoint-demo: ## prove crash recovery: pause → checkpoint to Postgres → resume in a fresh process
+	uv run python -m multiagent_rag.checkpointing.demo
+
 psql-doc:       ## psql into the document / vector store
 	docker compose exec doc-store psql -U rag -d docs
 

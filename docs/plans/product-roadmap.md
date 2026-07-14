@@ -30,14 +30,14 @@ multi-version seams baked in (CLAUDE.md Rule 4).
 - [x] Example routing questions pass  ← **Phase 1 gate PASSED** (rag / sql / both all correct)
 - [x] Learning docs: `/learning/03`–`/learning/06` written
 
-## Phase 2 — Service / MLOps layer
+## Phase 2 — Service / MLOps layer  🟡 in progress
 *Done when: an interrupted run resumes from its checkpoint, and every run is traceable.*
 
-- [ ] FastAPI wrapper around the graph
-- [ ] Postgres checkpointing (NOT in-memory)
-- [ ] Tracing wired in (Langfuse / LangSmith)
-- [ ] Kill a run mid-flight → it resumes from checkpoint  ← **Phase 2 gate**
-- [ ] Learning docs written
+- [x] Postgres checkpointing (NOT in-memory) — dedicated `checkpoint-store` + `PostgresSaver`; grounded against the installed 3.1.0 API
+- [x] Kill a run mid-flight → it resumes from checkpoint — **proven** (`make checkpoint-demo`: pause → checkpoint → fresh process restores state → resume, workers not re-run)
+- [ ] FastAPI wrapper around the graph (request carries a `thread_id`)
+- [ ] Tracing wired in (Langfuse / LangSmith)  ← other half of the **Phase 2 gate**
+- [x] Learning docs: `/learning/07` written
 
 ## Phase 3 — Operations
 *Done when: it runs on the cluster, healthy, and the SQL agent provably cannot reach the doc store.*
