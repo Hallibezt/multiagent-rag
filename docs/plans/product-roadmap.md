@@ -19,17 +19,16 @@ multi-version seams baked in (CLAUDE.md Rule 4).
 - [x] Similarity query returns sensible chunks  ← **Phase 0 gate PASSED** (hot tub, waterfalls, checkout, beach-safety all resolve correctly)
 - [x] `/learning/01-*` + `/learning/02-*` written
 
-## Phase 1 — The graph (core)  🟡 in progress
-*Done when: the example routing questions return correct answers via the correct agent(s).*
+## Phase 1 — The graph (core)  ✅ COMPLETE
+*Done when: the example routing questions return correct answers via the correct agent(s).* ✓ verified (rag / sql / both)
 
 - [x] Define the shared typed state (Rule 5: nested, per-agent ownership) — `graph/state.py`
 - [x] RAG agent node (pgvector retrieval) — wraps Phase 0 search
 - [x] Supervisor node — **LLM classifier** via `messages.parse` (validated route enum), grounded against claude-api; models config-injected (default `claude-opus-4-8`, router swappable to `claude-haiku-4-5`)
-- [x] RAG answer synthesis — grounded ("answer only from retrieved context"), verified end-to-end
-- [x] SQL agent node — synthetic transactional seed + **safe read-only text-to-SQL** (SELECT-validated + `conn.read_only`); verified (13 confirmed bookings / 637k ISK correct)
-- [ ] Fan-out to BOTH agents + synthesis node
-- [ ] Example routing questions pass  ← **Phase 1 gate**
-- [x] Learning docs: `/learning/03` + `/learning/04` + `/learning/05` written
+- [x] SQL agent node — synthetic transactional seed + **safe read-only text-to-SQL** (SELECT-validated + `conn.read_only`); verified exact (13 confirmed bookings / 637k ISK)
+- [x] Fan-out to BOTH agents (parallel superstep) + `synthesize` merge node — workers gather, synthesizer composes (Rule 5 keeps parallel writes collision-free)
+- [x] Example routing questions pass  ← **Phase 1 gate PASSED** (rag / sql / both all correct)
+- [x] Learning docs: `/learning/03`–`/learning/06` written
 
 ## Phase 2 — Service / MLOps layer
 *Done when: an interrupted run resumes from its checkpoint, and every run is traceable.*

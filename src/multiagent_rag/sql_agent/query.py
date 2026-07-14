@@ -1,8 +1,9 @@
-"""Text-to-SQL over the sql-store — the SQL agent.
+"""Text-to-SQL over the sql-store — the SQL agent's evidence-gathering half.
 
 Claude turns a question + the schema into ONE SELECT; we validate it's read-only,
 run it in a read-only session (defense in depth — an LLM could emit DROP/DELETE),
-then synthesize a natural-language answer from the rows.
+and return the query + rows. Turning rows into prose is the graph's `synthesize`
+node — this module only gathers.
 """
 
 from __future__ import annotations
@@ -32,12 +33,6 @@ Rules:
 - Always include a LIMIT of at most 100.
 Return only the query."""
 
-_ANSWER_SYSTEM = (
-    "Answer the guest's question using the SQL result rows below. Be concise and "
-    "specific — include the actual number, amount, or names. If there are no rows, "
-    "say there are none."
-)
-
 _FORBIDDEN = re.compile(r"\b(insert|update|delete|drop|alter|truncate|create|grant|revoke)\b", re.I)
 
 
@@ -53,21 +48,16 @@ def _validate(sql: str) -> str:
     return s
 
 
-def answer_question(question: str) -> tuple[str, list[dict], str]:
-    """Returns (sql, rows, answer)."""
+def run_query(question: str) -> tuple[str, list[dict]]:
+    """Generate a SELECT for the question, validate it, run it read-only, return
+    (sql, rows)."""
     generated = llm.structured(_GEN_SYSTEM, question, _SQL, model=settings.llm_model, max_tokens=400)
     sql = _validate(generated.sql)
 
     with psycopg.connect(settings.sql_store_dsn) as conn:
-        conn.read_only = True  # second line of defense (enforced by Postgres)
+        conn.read_only = True  # enforced by Postgres — any write raises
         with conn.cursor() as cur:
             cur.execute(sql)
             cols = [d.name for d in cur.description]
             rows = [dict(zip(cols, r)) for r in cur.fetchmany(100)]
-
-    answer = llm.text(
-        _ANSWER_SYSTEM,
-        f"Question: {question}\n\nSQL: {sql}\n\nRows: {rows}",
-        max_tokens=400,
-    )
-    return sql, rows, answer
+    return sql, rows
