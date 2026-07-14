@@ -44,6 +44,13 @@ checkpoint-demo: ## prove crash recovery: pause → checkpoint to Postgres → r
 serve:          ## run the FastAPI service on :8000 (POST /ask, GET /health)
 	uv run uvicorn multiagent_rag.service.app:app --host 0.0.0.0 --port 8000
 
+.PHONY: langfuse-up langfuse-down
+langfuse-up:    ## start self-hosted Langfuse (UI + traces at http://localhost:3000)
+	docker compose -f langfuse/docker-compose.yml up -d
+
+langfuse-down:  ## stop self-hosted Langfuse (keeps its data)
+	docker compose -f langfuse/docker-compose.yml down
+
 psql-doc:       ## psql into the document / vector store
 	docker compose exec doc-store psql -U rag -d docs
 

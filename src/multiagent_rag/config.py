@@ -59,6 +59,20 @@ class Settings(BaseSettings):
         description="Claude model for the supervisor classifier (claude-haiku-4-5 is a cheaper, faster option).",
     )
 
+    # --- Tracing (self-hosted Langfuse; optional — set the keys to enable) ---
+    langfuse_host: str = Field(
+        default="http://localhost:3000",
+        description="Self-hosted Langfuse URL (`make langfuse-up`).",
+    )
+    langfuse_public_key: str | None = Field(
+        default=None,
+        description="Langfuse public key; tracing is OFF unless this and the secret are set.",
+    )
+    langfuse_secret_key: str | None = Field(
+        default=None,
+        description="Langfuse secret key (the .env.example demo value matches the compose init).",
+    )
+
 
 # Import this singleton everywhere: `from multiagent_rag.config import settings`.
 settings = Settings()

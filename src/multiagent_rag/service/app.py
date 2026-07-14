@@ -3,7 +3,7 @@
 A web server handles requests on worker threads, and psycopg connections are not
 thread-safe — so the checkpointer is backed by a **connection pool** (each thread
 borrows its own connection). The pool is opened once in the app lifespan and the
-persistent graph is built from it.
+persistent graph is built from it. Every run is traced via Langfuse (if enabled).
 
 Run:  make serve      then POST to http://localhost:8000/ask
 """
@@ -20,6 +20,7 @@ from pydantic import BaseModel
 
 from multiagent_rag.config import settings
 from multiagent_rag.graph.build import build_graph
+from multiagent_rag.tracing import callbacks
 
 
 @asynccontextmanager
@@ -69,7 +70,7 @@ def ask(body: AskRequest, request: Request) -> AskResponse:
     thread_id = body.thread_id or f"api-{uuid.uuid4().hex[:8]}"
     result = request.app.state.graph.invoke(
         {"question": body.question},
-        {"configurable": {"thread_id": thread_id}},
+        {"configurable": {"thread_id": thread_id}, "callbacks": callbacks()},
     )
     return AskResponse(
         thread_id=thread_id,
