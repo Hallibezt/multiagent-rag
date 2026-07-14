@@ -31,6 +31,10 @@ ingest:         ## embed the seed into the doc store (no GuestPad needed)
 search:         ## similarity search, e.g. make search Q="how do I use the hot tub"
 	uv run python -m multiagent_rag.ingest.search "$(Q)"
 
+.PHONY: ask
+ask:            ## ask the graph, e.g. make ask Q="how do I use the hot tub"
+	uv run python -m multiagent_rag.graph.run "$(Q)"
+
 psql-doc:       ## psql into the document / vector store
 	docker compose exec doc-store psql -U rag -d docs
 

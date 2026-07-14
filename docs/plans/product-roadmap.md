@@ -19,15 +19,17 @@ multi-version seams baked in (CLAUDE.md Rule 4).
 - [x] Similarity query returns sensible chunks  ← **Phase 0 gate PASSED** (hot tub, waterfalls, checkout, beach-safety all resolve correctly)
 - [x] `/learning/01-*` + `/learning/02-*` written
 
-## Phase 1 — The graph (core)
+## Phase 1 — The graph (core)  🟡 in progress
 *Done when: the example routing questions return correct answers via the correct agent(s).*
 
-- [ ] Define the shared typed state (Rule 5: nested, per-agent ownership)
-- [ ] RAG agent node (pgvector retrieval)
-- [ ] SQL agent node (text-to-SQL over the scoped tables)
-- [ ] Supervisor node (classify + route, incl. fan-out to both)
+- [x] Define the shared typed state (Rule 5: nested, per-agent ownership) — `graph/state.py`
+- [x] RAG agent node (pgvector retrieval) — wraps Phase 0 search
+- [x] Supervisor node — routing via `add_conditional_edges` (LangGraph 1.x, grounded); **heuristic placeholder**, LLM classifier pending API key
+- [ ] SQL agent node — STUB; needs synthetic transactional data (GuestPad's are empty) + text-to-SQL
+- [ ] LLM supervisor + LLM answer synthesis (needs Claude API key; ground claude-api first)
+- [ ] Fan-out to BOTH agents + synthesis node
 - [ ] Example routing questions pass  ← **Phase 1 gate**
-- [ ] Learning docs written
+- [x] Learning docs: `/learning/03` written
 
 ## Phase 2 — Service / MLOps layer
 *Done when: an interrupted run resumes from its checkpoint, and every run is traceable.*
