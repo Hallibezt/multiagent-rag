@@ -50,7 +50,7 @@ def _validate(sql: str) -> str:
 
 def run_query(question: str) -> tuple[str, list[dict]]:
     """Generate a SELECT for the question, validate it, run it read-only, return
-    (sql, rows)."""
+    (sql, rows). Runs in-process against the sql-store."""
     generated = llm.structured(_GEN_SYSTEM, question, _SQL, model=settings.llm_model, max_tokens=400)
     sql = _validate(generated.sql)
 
@@ -61,3 +61,14 @@ def run_query(question: str) -> tuple[str, list[dict]]:
             cols = [d.name for d in cur.description]
             rows = [dict(zip(cols, r)) for r in cur.fetchmany(100)]
     return sql, rows
+
+
+def remote_query(question: str, base_url: str) -> tuple[str, list[dict]]:
+    """Call the standalone SQL-agent service (Phase 3). Same (sql, rows) contract
+    as `run_query`, but over HTTP to a separately-deployed pod."""
+    import httpx
+
+    resp = httpx.post(f"{base_url.rstrip('/')}/query", json={"question": question}, timeout=60)
+    resp.raise_for_status()
+    data = resp.json()
+    return data["sql"], data["rows"]

@@ -18,7 +18,7 @@ from multiagent_rag import llm
 from multiagent_rag.config import settings
 from multiagent_rag.graph.state import GraphState
 from multiagent_rag.ingest.search import search
-from multiagent_rag.sql_agent.query import run_query
+from multiagent_rag.sql_agent.query import remote_query, run_query
 
 
 # --- Supervisor: an LLM classifier that routes the question ---------------------
@@ -61,8 +61,13 @@ def rag_retrieve(state: GraphState) -> dict:
 
 
 # --- SQL worker: safe read-only text-to-SQL (returns query + rows) --------------
+# In-process by default; when SQL_AGENT_URL is set, delegate to the separately
+# deployed SQL-agent pod so a NetworkPolicy can fence it off from the doc store.
 def sql_query(state: GraphState) -> dict:
-    sql, rows = run_query(state["question"])
+    if settings.sql_agent_url:
+        sql, rows = remote_query(state["question"], settings.sql_agent_url)
+    else:
+        sql, rows = run_query(state["question"])
     return {"sql": {"query": sql, "rows": rows}}
 
 

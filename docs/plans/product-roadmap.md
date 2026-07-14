@@ -42,9 +42,10 @@ multi-version seams baked in (CLAUDE.md Rule 4).
 ## Phase 3 — Operations
 *Done when: it runs on the cluster, healthy, and the SQL agent provably cannot reach the doc store.*
 
-- [ ] Containerise + health checks
+- [x] Containerise + health checks — `Dockerfile` (uv base image); verified the container serves `/health` against the stores
+- [x] SQL agent as its own service/pod — HTTP seam (`SQL_AGENT_URL`; in-process locally), so the NetworkPolicy has a real boundary to enforce; verified all three paths
 - [ ] Deploy to **minikube** with an enforcing CNI (Calico/Cilium — default minikube does NOT enforce NetworkPolicy) — `--dry-run=server` every manifest first (Rule 1)
-- [ ] NetworkPolicy scoping agent reach (stand doc store + SQL DB up as *separate* endpoints so it's enforceable — Rule 4 seam)
+- [ ] NetworkPolicy scoping agent reach (doc store + SQL store are already separate endpoints — Rule 4 seam)
 - [ ] Prove SQL agent cannot reach the document store  ← **Phase 3 gate**
 - [ ] *Stretch:* redeploy the same manifests to GKE or AKS (managed-cloud demo) — verify current pricing first (Rule 1), use an ephemeral cluster + teardown
 - [ ] Learning docs written

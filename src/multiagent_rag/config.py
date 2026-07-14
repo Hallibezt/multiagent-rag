@@ -34,6 +34,10 @@ class Settings(BaseSettings):
         default="postgresql://rag:rag@localhost:5434/checkpoints",
         description="Postgres store for LangGraph checkpoints (graph/orchestration state).",
     )
+    sql_agent_url: str | None = Field(
+        default=None,
+        description="If set, the SQL node calls the SQL-agent service here (Phase 3 pod isolation); else it runs text-to-SQL in-process.",
+    )
 
     # --- Embedding (fastembed: local, no API key) ---
     embedding_model: str = Field(
