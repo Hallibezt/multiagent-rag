@@ -41,6 +41,9 @@ ask:            ## ask the graph, e.g. make ask Q="how do I use the hot tub"
 checkpoint-demo: ## prove crash recovery: pause → checkpoint to Postgres → resume in a fresh process
 	uv run python -m multiagent_rag.checkpointing.demo
 
+serve:          ## run the FastAPI service on :8000 (POST /ask, GET /health)
+	uv run uvicorn multiagent_rag.service.app:app --host 0.0.0.0 --port 8000
+
 psql-doc:       ## psql into the document / vector store
 	docker compose exec doc-store psql -U rag -d docs
 

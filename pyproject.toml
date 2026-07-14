@@ -9,12 +9,14 @@ authors = [
 requires-python = ">=3.13"
 dependencies = [
     "anthropic>=0.116.0",
+    "fastapi>=0.139.0",
     "fastembed>=0.8.0",
     "langgraph>=1.2.9",
     "langgraph-checkpoint-postgres>=3.1.0",
     "pgvector>=0.5.0",
     "psycopg[binary]>=3.3.4",
     "pydantic-settings>=2.14.2",
+    "uvicorn[standard]>=0.51.0",
 ]
 
 [project.scripts]
@@ -26,6 +28,7 @@ build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
+    "httpx>=0.28.1",
     "pytest>=9.1.1",
     "ruff>=0.15.21",
 ]
