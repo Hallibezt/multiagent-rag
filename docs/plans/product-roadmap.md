@@ -26,10 +26,10 @@ multi-version seams baked in (CLAUDE.md Rule 4).
 - [x] RAG agent node (pgvector retrieval) — wraps Phase 0 search
 - [x] Supervisor node — **LLM classifier** via `messages.parse` (validated route enum), grounded against claude-api; models config-injected (default `claude-opus-4-8`, router swappable to `claude-haiku-4-5`)
 - [x] RAG answer synthesis — grounded ("answer only from retrieved context"), verified end-to-end
-- [ ] SQL agent node — STUB; needs synthetic transactional data (GuestPad's are empty) + text-to-SQL
+- [x] SQL agent node — synthetic transactional seed + **safe read-only text-to-SQL** (SELECT-validated + `conn.read_only`); verified (13 confirmed bookings / 637k ISK correct)
 - [ ] Fan-out to BOTH agents + synthesis node
 - [ ] Example routing questions pass  ← **Phase 1 gate**
-- [x] Learning docs: `/learning/03` + `/learning/04` written
+- [x] Learning docs: `/learning/03` + `/learning/04` + `/learning/05` written
 
 ## Phase 2 — Service / MLOps layer
 *Done when: an interrupted run resumes from its checkpoint, and every run is traceable.*

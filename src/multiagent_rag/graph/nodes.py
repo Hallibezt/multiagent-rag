@@ -14,6 +14,7 @@ from multiagent_rag import llm
 from multiagent_rag.config import settings
 from multiagent_rag.graph.state import GraphState
 from multiagent_rag.ingest.search import search
+from multiagent_rag.sql_agent.query import answer_question
 
 
 # --- Supervisor: an LLM classifier that routes the question ---------------------
@@ -69,12 +70,7 @@ def rag_retrieve(state: GraphState) -> dict:
     return {"retrieval": {"chunks": chunks}, "answer": answer}
 
 
-# --- SQL agent: STUB until it has synthetic transactional data ------------------
+# --- SQL agent: safe, read-only text-to-SQL over the structured store -----------
 def sql_query(state: GraphState) -> dict:
-    return {
-        "sql": {
-            "note": "SQL agent stub — GuestPad transactional tables are empty; "
-            "synthetic data + text-to-SQL come next."
-        },
-        "answer": "(SQL agent not wired yet — needs synthetic transactional data.)",
-    }
+    sql, rows, answer = answer_question(state["question"])
+    return {"sql": {"query": sql, "rows": rows}, "answer": answer}
