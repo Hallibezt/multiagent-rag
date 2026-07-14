@@ -30,7 +30,7 @@ class Sql(TypedDict, total=False):
 
 class GraphState(TypedDict, total=False):
     question: str  # input
-    route: str  # supervisor's decision: "rag" | "sql"
+    route: str  # supervisor's decision: "rag" | "sql" | "both"
     retrieval: Retrieval  # owned by the RAG agent
     sql: Sql  # owned by the SQL agent
     answer: str  # the final answer
