@@ -21,6 +21,16 @@ logs:
 smoke:          ## prove the local stack works end-to-end (no secrets)
 	uv run python -m multiagent_rag.smoke
 
+.PHONY: extract ingest search
+extract:        ## (needs GuestPad) pull content into data/seed/documents.jsonl
+	uv run python -m multiagent_rag.ingest.extract
+
+ingest:         ## embed the seed into the doc store (no GuestPad needed)
+	uv run python -m multiagent_rag.ingest.load
+
+search:         ## similarity search, e.g. make search Q="how do I use the hot tub"
+	uv run python -m multiagent_rag.ingest.search "$(Q)"
+
 psql-doc:       ## psql into the document / vector store
 	docker compose exec doc-store psql -U rag -d docs
 

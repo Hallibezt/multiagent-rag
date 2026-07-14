@@ -9,15 +9,15 @@ multi-version seams baked in (CLAUDE.md Rule 4).
 
 ---
 
-## Phase 0 — Ingestion
-*Done when: a similarity query returns sensible chunks from real GuestPad content.*
+## Phase 0 — Ingestion ✅ COMPLETE
+*Done when: a similarity query returns sensible chunks from real GuestPad content.* ✓ verified
 
-- [x] Decide Python project tooling + pin verified versions (Rule 1) — uv + Python 3.13; versions verified against PyPI + locked in `uv.lock`; two-store docker-compose + injected config; smoke test
-- [ ] Access to a GuestPad Postgres (pick the property with the richest seed content)
-- [ ] Stand up the pgvector table(s)
-- [ ] Chunk + embed the GuestPad document columns (see CLAUDE.md → GuestPad Data Map)
-- [ ] Similarity query returns sensible chunks  ← **Phase 0 gate**
-- [ ] `/learning/01-*` written
+- [x] Decide Python project tooling + pin verified versions (Rule 1) — uv + Python 3.13; versions verified vs PyPI + locked in `uv.lock`; two-store docker-compose + injected config; smoke test
+- [x] Access to a GuestPad Postgres — connected read-only; extracted 247 docs → `data/seed/documents.jsonl` (extract → seed → ingest, so it also runs with **zero** GuestPad access)
+- [x] Stand up the pgvector table(s) — `documents` table, `vector(384)`, HNSW cosine index
+- [x] Chunk + embed the GuestPad document columns — 252 chunks, local fastembed (keyless)
+- [x] Similarity query returns sensible chunks  ← **Phase 0 gate PASSED** (hot tub, waterfalls, checkout, beach-safety all resolve correctly)
+- [x] `/learning/01-*` + `/learning/02-*` written
 
 ## Phase 1 — The graph (core)
 *Done when: the example routing questions return correct answers via the correct agent(s).*
