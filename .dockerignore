@@ -1,0 +1,23 @@
+# Keep the build context (and the image) small — only src + lockfiles are needed.
+.venv/
+.git/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Secrets / local-only
+.env
+.env.*
+.claude/
+
+# Not needed to run the service
+data/
+docs/
+langfuse/
+db/
+learning/
+CLAUDE.md
+Makefile
+tests/
