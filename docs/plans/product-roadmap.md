@@ -24,12 +24,12 @@ multi-version seams baked in (CLAUDE.md Rule 4).
 
 - [x] Define the shared typed state (Rule 5: nested, per-agent ownership) — `graph/state.py`
 - [x] RAG agent node (pgvector retrieval) — wraps Phase 0 search
-- [x] Supervisor node — routing via `add_conditional_edges` (LangGraph 1.x, grounded); **heuristic placeholder**, LLM classifier pending API key
+- [x] Supervisor node — **LLM classifier** via `messages.parse` (validated route enum), grounded against claude-api; models config-injected (default `claude-opus-4-8`, router swappable to `claude-haiku-4-5`)
+- [x] RAG answer synthesis — grounded ("answer only from retrieved context"), verified end-to-end
 - [ ] SQL agent node — STUB; needs synthetic transactional data (GuestPad's are empty) + text-to-SQL
-- [ ] LLM supervisor + LLM answer synthesis (needs Claude API key; ground claude-api first)
 - [ ] Fan-out to BOTH agents + synthesis node
 - [ ] Example routing questions pass  ← **Phase 1 gate**
-- [x] Learning docs: `/learning/03` written
+- [x] Learning docs: `/learning/03` + `/learning/04` written
 
 ## Phase 2 — Service / MLOps layer
 *Done when: an interrupted run resumes from its checkpoint, and every run is traceable.*

@@ -41,6 +41,20 @@ class Settings(BaseSettings):
         description="Vector dimension of embedding_model; MUST match the pgvector column size.",
     )
 
+    # --- LLM (Claude via Anthropic; model-agnostic seam) ---
+    anthropic_api_key: str | None = Field(
+        default=None,
+        description="Claude API key (Phase 1+ agents). Loaded from .env; never committed.",
+    )
+    llm_model: str = Field(
+        default="claude-opus-4-8",
+        description="Claude model for answer synthesis and text-to-SQL.",
+    )
+    router_model: str = Field(
+        default="claude-opus-4-8",
+        description="Claude model for the supervisor classifier (claude-haiku-4-5 is a cheaper, faster option).",
+    )
+
 
 # Import this singleton everywhere: `from multiagent_rag.config import settings`.
 settings = Settings()
